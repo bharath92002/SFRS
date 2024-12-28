@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ exam_type }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        a {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            background-color: #1d6ccc;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #2ee0ff;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        img {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="/static/images/RCE_LOGO.png" alt="Logo">
+        </div>
+        {% if exam_type == 'mid_exams' %}
+        <h1>Mid Exams</h1>
+        {% else %}
+        <h1>Sem Exams</h1>
+        {% endif %}
+        
+        <ul>
+            <li><a href="/students_list">Students List</a></li>
+            <li><a href="/add_student">Add Student</a></li>
+            <li><a href="/remove_student">Remove Student</a></li>
+            <li><a href="/login_options">Log out</a></li>
+        </ul>
+    </div>
+</body>
+</html>

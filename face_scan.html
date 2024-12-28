@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Scan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #1d6ccc;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2ee0ff;
+        }
+
+        #video {
+            width: 250px;
+            height: auto;
+            border: 2px solid #333;
+            margin-top: 20px;
+        }
+
+        #captureBtn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+
+        #verifyBtn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 20px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+        
+        #hallTicketImage {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Verify Student</h1>
+
+    <form id="captureForm" action="/save_image" method="post" enctype="multipart/form-data">
+        <label for="hall_ticket_number">Enter Hall Ticket Number:</label>
+        <input type="text" id="hall_ticket_number" name="hall_ticket_number">
+
+        <video id="video" autoplay></video>
+        <button id="captureBtn">Capture Image</button>
+
+        <input type="hidden" id="capturedImageData" name="scanned_face_image">
+
+        <button id="verifyBtn" type="submit">Verify</button>
+    </form>
+
+    <div id="message"></div>
+    {% if verification_result == "success" %}
+    <b><p style="text-align: center; color: green;">Verification successful!</p></b>
+    {% elif verification_result == "failure" %}
+    <b><p style="text-align: center; color: red;">Verification failed. {{ message }}</p></b>
+    {% endif %}
+    
+    {% if hall_ticket_path %}
+    <img id="hallTicketImage" src="{{ hall_ticket_path }}" alt="Hall Ticket">
+    {% endif %}
+
+    <script>
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                var video = document.getElementById('video');
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch(function(err) {
+                console.error('Error accessing the camera: ', err);
+            });
+
+        document.getElementById('captureBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            var canvas = document.createElement('canvas');
+            var video = document.getElementById('video');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var imgData = canvas.toDataURL('image/png');
+
+            var capturedImageData = document.getElementById('capturedImageData');
+            capturedImageData.value = imgData;
+
+            fetch('/save_image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image_data: imgData })
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Failed to save image');
+                }
+                console.log('Image saved successfully');
+                document.getElementById('message').textContent = 'Image taken successfully!';
+            })
+            .catch(function(error) {
+                console.error('Error saving image: ', error);
+                document.getElementById('message').textContent = 'Failed to capture image. Please try again.';
+            });
+        });
+
+        document.getElementById('verifyBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('captureForm').action = '/face_scan_verification';
+            document.getElementById('captureForm').submit();
+        });
+    </script>
+</body>
+
+</html>

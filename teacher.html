@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        img {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/static/images/RCE_LOGO.png" alt="Logo">
+        <h1>Welcome {{teacher_name}}</h1>
+        <p>Here, you can view and manage students.</p>
+        <a href="/face_scan">Verify Student</a>
+        <a href="/authenticated_students">Show Verified Student List</a>
+        <a href="/phoney_students">Show Phoney Student List</a>
+        <a href="/">Logout</a>
+    </div>
+</body>
+</html>
