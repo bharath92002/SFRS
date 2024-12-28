@@ -17,7 +17,7 @@ Passwords are hashed with bcrypt.
 Secure image storage for student records and captured images.
 Tech Stack:
 Backend: Python, Flask
-Frontend: HTML, CSS, Jinja2 templates
+Frontend: HTML, CSS, templates
 Database: MySQL
 Face Recognition: DeepFace with Facenet model
 Libraries: NumPy, PIL, bcrypt
